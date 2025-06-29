@@ -1,5 +1,3 @@
-/// <reference types="../types/jest-custom" />
-
 import { describe, it, expect, beforeEach } from '@jest/globals';
 import { Calculator, User } from '../index';
 

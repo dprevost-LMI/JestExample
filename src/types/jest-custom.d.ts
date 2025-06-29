@@ -1,25 +1,20 @@
-// Custom Jest matchers extension for Jest 30+
-// Using the official Jest documentation approach with 'expect' module
+// Custom Jest matchers type declarations for Jest 30+ with full IDE support
 
+// Extend the core expect module that Jest 30 uses
 declare module 'expect' {
-  interface AsymmetricMatchers {
-    toBeCloseTo(expected: number, tolerance: number): void;
-    toBeAlphabetic(): void;
-    toHaveAllProperties(properties: string[]): void;
-    toBeInRange(min: number, max: number): void;
-  }
-  
   interface Matchers<R> {
     toBeCloseTo(expected: number, tolerance: number): R;
     toBeAlphabetic(): R;
     toHaveAllProperties(properties: string[]): R;
     toBeInRange(min: number, max: number): R;
   }
-
-  // Attempting to extend expect with .not for asymmetric matchers
-  interface Expect {
-    not: {
-      toBeInRange(min: number, max: number): void;
-    };
+  
+  interface AsymmetricMatchers {
+    toBeCloseTo(expected: number, tolerance: number): AsymmetricMatcher;
+    toBeAlphabetic(): AsymmetricMatcher;
+    toHaveAllProperties(properties: string[]): AsymmetricMatcher;
+    toBeInRange(min: number, max: number): AsymmetricMatcher;
   }
 }
+
+export {};
