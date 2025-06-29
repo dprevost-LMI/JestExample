@@ -98,6 +98,20 @@ describe('Calculator', () => {
       ]);
     });
 
+    it('should use expect.not.toBeInRange asymmetric matcher', () => {
+      const outOfRangeResults = [
+        calculator.add(10, 5),   // 15 - outside range [1, 10]
+        calculator.add(0, 0),    // 0 - outside range [5, 15]
+        calculator.add(20, 5),   // 25 - outside range [1, 20]
+      ];
+
+      expect(outOfRangeResults).toEqual([
+        expect.not.toBeInRange(1, 10),   // 15 is NOT in range [1, 10]
+        expect.not.toBeInRange(5, 15),   // 0 is NOT in range [5, 15]
+        expect.not.toBeInRange(1, 20),   // 25 is NOT in range [1, 20]
+      ]);
+    });
+
     it('should use objectContaining asymmetric matcher', () => {
       const calculationLog = [
         { operation: 'add', a: 2, b: 3, result: 5, timestamp: Date.now() },

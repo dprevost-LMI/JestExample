@@ -15,4 +15,11 @@ declare module 'expect' {
     toHaveAllProperties(properties: string[]): R;
     toBeInRange(min: number, max: number): R;
   }
+
+  // Attempting to extend expect with .not for asymmetric matchers
+  interface Expect {
+    not: {
+      toBeInRange(min: number, max: number): void;
+    };
+  }
 }

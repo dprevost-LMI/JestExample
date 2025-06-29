@@ -11,4 +11,18 @@ import { customMatchers } from './customMatchers';
 // - expect.toBeInRange(min, max) - asymmetric matcher
 expect.extend(customMatchers);
 
+// Add inverse asymmetric matchers to expect.not
+(expect as any).not = (expect as any).not || {};
+(expect as any).not.toBeInRange = (min: number, max: number) => {
+  return {
+    $$typeof: Symbol.for('jest.asymmetricMatcher'),
+    asymmetricMatch(received: number) {
+      return typeof received === 'number' && (received < min || received > max);
+    },
+    toString() {
+      return `not.toBeInRange(${min}, ${max})`;
+    },
+  };
+};
+
 // Note: stringMatching and objectContaining are built-in Jest asymmetric matchers
