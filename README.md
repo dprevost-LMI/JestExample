@@ -1,11 +1,11 @@
 # Jest TypeScript Example with Custom Matchers
 
-This project demonstrates how to use **Jest 30+** with TypeScript, including custom matchers and asymmetric matchers, utilizing the modern `@jest/globals` package instead of the deprecated `@types/jest`. **No explicit imports from `@jest/globals` are required in test files!**
+This project demonstrates how to use **Jest 30** with TypeScript, including custom matchers and asymmetric matchers, utilizing the `@types/jest` package for TypeScript definitions. **Jest globals are available automatically in test files without explicit imports!**
 
 ## Features
 
 - **Jest 30.0.3**: Latest Jest version with improved performance and features
-- **@jest/globals**: Modern Jest typing approach (replaces deprecated `@types/jest`)
+- **@types/jest 30.0.0**: Latest Jest typing definitions with full IntelliSense support
 - **No explicit imports needed**: Jest globals are available automatically in test files
 - **TypeScript Configuration**: Properly configured TypeScript with Jest
 - **Custom Matchers**: Custom Jest matchers with TypeScript declarations
@@ -13,14 +13,14 @@ This project demonstrates how to use **Jest 30+** with TypeScript, including cus
 - **Comprehensive Tests**: Examples showing all features in action
 - **No Babel required**: Pure TypeScript + Jest 30 setup
 
-## Key Updates for Jest 30+
+## Key Configuration for @types/jest 30
 
-✅ **Upgraded to Jest 30.0.3** from Jest 29.7.0  
-✅ **Replaced `@types/jest`** with `@jest/globals`  
+✅ **Using Jest 30.0.3** - Latest Jest version with enhanced performance  
+✅ **@types/jest 30.0.0 for TypeScript support** - Latest type definitions  
 ✅ **No explicit imports required** - Jest globals are available automatically  
-✅ **Updated Jest configuration** to use modern ts-jest syntax with `injectGlobals: true`  
-✅ **Custom TypeScript declarations** for Jest 30 compatibility  
-✅ **Maintained full functionality** of custom matchers
+✅ **Modern Jest configuration** - Optimized for Jest 30 features  
+✅ **Custom TypeScript declarations** for custom matchers  
+✅ **Full functionality** of custom matchers and asymmetric matchers
 
 ## Project Structure
 
@@ -28,7 +28,7 @@ This project demonstrates how to use **Jest 30+** with TypeScript, including cus
 src/
 ├── index.ts                    # Main source code (Calculator and User classes)
 ├── customMatchers.ts           # Custom matcher implementations
-├── setupTests.ts              # Jest setup file (optional)
+├── setupTests.ts              # Jest setup file
 ├── types/
 │   └── jest-custom.d.ts       # TypeScript declarations for custom matchers
 └── __tests__/
@@ -116,34 +116,34 @@ expect(users).toEqual([
    npm run build
    ```
 
-## Migration Notes: Jest 29 → Jest 30
+## Migration Notes: Using @types/jest 30
 
-This project demonstrates the proper way to migrate from Jest 29 to Jest 30 **without requiring explicit imports**:
+This project demonstrates the proper way to use Jest 30 with TypeScript using the `@types/jest` version 30 approach:
 
-### Dependencies Changed:
-- ❌ `@types/jest@^29.5.5` (deprecated)
-- ✅ `@jest/globals@^30.0.3` (modern approach)
-- ✅ `jest@^30.0.3` (latest version)
+### Dependencies Used:
+- ✅ `@types/jest@^30.0.0` (latest Jest type definitions for Jest 30)
+- ✅ `jest@^30.0.3` (latest Jest version)
+- ✅ `ts-jest@^29.1.1` (TypeScript transformer for Jest)
 
-### Configuration Updated:
-- **Jest Config**: Added `injectGlobals: true` to make Jest functions globally available
-- **TypeScript**: Custom ambient declarations that leverage `@jest/globals` types
+### Configuration Details:
+- **Jest Config**: Modern Jest 30 configuration with optimized settings
+- **TypeScript**: Includes `jest` in types array for global Jest functions
 - **Test Files**: No imports needed - Jest functions are available globally!
 
 ### Key Benefits:
 - ✨ **No explicit imports**: Write tests like classic Jest (no imports needed)
-- 🚀 **Latest Jest features**: Performance improvements and new functionality
+- 🚀 **Latest Jest features**: Performance improvements and new Jest 30 functionality
 - 📝 **Full TypeScript support**: Complete type checking and IntelliSense
 - 🔧 **No Babel required**: Pure TypeScript + Jest 30 setup
-- 🎯 **Custom matchers work**: All custom functionality preserved
+- 🎯 **Custom matchers work perfectly**: All custom functionality preserved
+- 💪 **Cutting-edge**: Latest `@types/jest` for Jest 30 compatibility
 
 ### Test File Example:
 ```typescript
-/// <reference path="../types/jest-globals.d.ts" />
-
 import { Calculator } from '../index';
 
 // No need to import describe, it, expect, beforeEach!
+// @types/jest provides these globally
 describe('Calculator', () => {
   let calculator: Calculator;
 
@@ -159,15 +159,15 @@ describe('Calculator', () => {
 
 ## TypeScript Configuration
 
-The project includes proper TypeScript declarations for all custom matchers in `src/types/jest-custom.d.ts`. This provides full IntelliSense support and type checking for your custom matchers.
+The project includes proper TypeScript declarations for all custom matchers in `src/types/jest-custom.d.ts`. This provides full IntelliSense support and type checking for your custom matchers when using `@types/jest` version 30.
 
-**Note**: Due to Jest 30's updated type system, custom matchers currently require type assertions (`as any`) in test files. This is a temporary limitation while the Jest ecosystem adapts to the new typing approach.
+The custom matchers work seamlessly with the Jest 30 typing system, providing excellent developer experience and type safety with the latest Jest features.
 
 ## Test Examples
 
 The test file (`src/__tests__/index.test.ts`) contains comprehensive examples of:
 
-- Basic Jest matchers with `@jest/globals`
+- Basic Jest matchers with Jest 30
 - Custom matchers in various scenarios  
 - Asymmetric matchers with complex objects
 - Combining multiple custom matchers
@@ -176,11 +176,11 @@ The test file (`src/__tests__/index.test.ts`) contains comprehensive examples of
 
 ## Key Files Explained
 
-- **`package.json`**: Updated dependencies for Jest 30 and `@jest/globals`
+- **`package.json`**: Uses `@types/jest` version 30 for Jest 30 type definitions
 - **`customMatchers.ts`**: Contains the implementation of all custom matchers
-- **`jest-custom.d.ts`**: TypeScript declarations for IDE support (Jest 30 compatible)
-- **`setupTests.ts`**: Jest setup using `@jest/globals` expect extension
-- **`index.test.ts`**: Comprehensive test examples with Jest 30 patterns
-- **`jest.config.js`**: Modern Jest 30 configuration without deprecated globals
+- **`jest-custom.d.ts`**: TypeScript declarations for custom matchers (works with @types/jest 30)
+- **`setupTests.ts`**: Jest setup extending global expect with custom matchers
+- **`index.test.ts`**: Comprehensive test examples using Jest 30 approach
+- **`jest.config.js`**: Modern Jest 30 configuration for TypeScript projects
 
-This project serves as a complete example of how to extend Jest 30 with custom functionality while maintaining full TypeScript support and following modern Jest patterns.
+This project serves as a complete example of how to extend Jest 30 with custom functionality while maintaining full TypeScript support using the latest `@types/jest` version 30 approach.

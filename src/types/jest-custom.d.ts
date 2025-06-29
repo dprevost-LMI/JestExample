@@ -1,5 +1,5 @@
-// Custom Jest matchers extension for Jest 30
-// This file only contains the custom matcher definitions
+// Custom Jest matchers extension for @types/jest
+// This file contains the custom matcher definitions for use with @types/jest
 
 declare global {
   namespace jest {
@@ -18,6 +18,23 @@ declare global {
        * Custom matcher to check if an object has all required properties
        */
       toHaveAllProperties(properties: string[]): R;
+    }
+
+    interface Expect {
+      /**
+       * Asymmetric matcher for numbers within a range
+       */
+      numberInRange(min: number, max: number): any;
+      
+      /**
+       * Asymmetric matcher for string matching
+       */
+      stringMatching(pattern: string | RegExp): any;
+      
+      /**
+       * Asymmetric matcher for object containing properties
+       */
+      objectContaining(properties: object): any;
     }
   }
 }

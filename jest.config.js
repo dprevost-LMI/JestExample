@@ -9,7 +9,6 @@ module.exports = {
     }],
   },
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
-  injectGlobals: true,
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/**/*.d.ts',

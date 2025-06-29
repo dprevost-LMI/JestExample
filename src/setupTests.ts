@@ -1,7 +1,6 @@
 // This file is automatically loaded by Jest to set up the testing environment
 // It extends Jest with custom matchers and asymmetric matchers
 
-import { expect } from '@jest/globals';
 import { customMatchers, customAsymmetricMatchers } from './customMatchers';
 
 // Extend Jest with custom matchers

@@ -1,5 +1,3 @@
-/// <reference path="../types/jest-globals.d.ts" />
-
 import { Calculator, User } from '../index';
 
 describe('Calculator', () => {
