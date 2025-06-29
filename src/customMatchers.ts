@@ -72,3 +72,16 @@ export const customMatchers = {
     }
   },
 };
+
+// Inverse asymmetric matcher factories
+export const inverseAsymmetricMatchers = {
+  toBeInRange: (min: number, max: number) => ({
+    $$typeof: Symbol.for('jest.asymmetricMatcher'),
+    asymmetricMatch(received: number) {
+      return typeof received === 'number' && (received < min || received > max);
+    },
+    toString() {
+      return `not.toBeInRange(${min}, ${max})`;
+    },
+  }),
+};
