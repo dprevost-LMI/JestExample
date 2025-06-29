@@ -54,10 +54,10 @@ describe('Calculator', () => {
     });
 
     it('should use toBeAlphabetic custom matcher', () => {
-      (expect('Hello') as any).toBeAlphabetic();
-      (expect('World') as any).toBeAlphabetic();
-      (expect('Hello123') as any).not.toBeAlphabetic();
-      (expect('Hello World') as any).not.toBeAlphabetic();
+      expect('Hello').toBeAlphabetic();
+      expect('World').toBeAlphabetic();
+      expect('Hello123').not.toBeAlphabetic();
+      expect('Hello World').not.toBeAlphabetic();
     });
 
     it('should use toHaveAllProperties custom matcher', () => {
@@ -67,9 +67,9 @@ describe('Calculator', () => {
         operands: [4, 6]
       };
       
-      // Note: Custom matchers require type assertion in Jest 30+
-      (expect(mathResult) as any).toHaveAllProperties(['result', 'operation', 'operands']);
-      (expect(mathResult) as any).not.toHaveAllProperties(['result', 'operation', 'timestamp']);
+      // Note: Custom matchers now work without type assertion thanks to expect module declaration
+      expect(mathResult).toHaveAllProperties(['result', 'operation', 'operands']);
+      expect(mathResult).not.toHaveAllProperties(['result', 'operation', 'timestamp']);
     });
   });
 
@@ -82,9 +82,9 @@ describe('Calculator', () => {
       ];
 
       expect(results).toEqual([
-        (expect as any).toBeInRange(1, 5),   // 3 is in range [1, 5]
-        (expect as any).toBeInRange(4, 8),   // 5 is in range [4, 8]
-        (expect as any).toBeInRange(6, 10),  // 7 is in range [6, 10]
+        expect.toBeInRange(1, 5),   // 3 is in range [1, 5]
+        expect.toBeInRange(4, 8),   // 5 is in range [4, 8]
+        expect.toBeInRange(6, 10),  // 7 is in range [6, 10]
       ]);
     });
 
@@ -111,7 +111,7 @@ describe('Calculator', () => {
         }),
         expect.objectContaining({
           operation: 'multiply',
-          a: (expect as any).toBeInRange(3, 5)
+          a: expect.toBeInRange(3, 5)
         })
       ]);
     });
@@ -129,9 +129,9 @@ describe('Calculator', () => {
       // This should fail because values don't match the ranges
       expect(() => {
         expect(outOfRangeResults).toEqual([
-          (expect as any).toBeInRange(1, 5),   // 20 is NOT in range [1, 5]
-          (expect as any).toBeInRange(4, 8),   // 1 is NOT in range [4, 8]
-          (expect as any).toBeInRange(6, 10),  // 2 is NOT in range [6, 10]
+          expect.toBeInRange(1, 5),   // 20 is NOT in range [1, 5]
+          expect.toBeInRange(4, 8),   // 1 is NOT in range [4, 8]
+          expect.toBeInRange(6, 10),  // 2 is NOT in range [6, 10]
         ]);
       }).toThrow();
 
@@ -140,9 +140,9 @@ describe('Calculator', () => {
       
       expect(() => {
         expect(nonMatchingOperations).toEqual([
-          (expect as any).stringMatching(/^add/),    // 'division' doesn't start with 'add'
-          (expect as any).stringMatching('sub'),     // 'modulo' doesn't contain 'sub'
-          (expect as any).stringMatching(/tion$/)    // 'exponential' doesn't end with 'tion'
+          expect.stringMatching(/^add/),    // 'division' doesn't start with 'add'
+          expect.stringMatching('sub'),     // 'modulo' doesn't contain 'sub'
+          expect.stringMatching(/tion$/)    // 'exponential' doesn't end with 'tion'
         ]);
       }).toThrow();
 
@@ -154,11 +154,11 @@ describe('Calculator', () => {
 
       expect(() => {
         expect(incompleteLog).toEqual([
-          (expect as any).objectContaining({
+          expect.objectContaining({
             operation: 'add',           // has 'subtract' not 'add'
             result: 5                   // has 3 not 5
           }),
-          (expect as any).objectContaining({
+          expect.objectContaining({
             operation: 'multiply',      // has 'divide' not 'multiply'
             result: 20                  // missing result property
           })
@@ -173,9 +173,9 @@ describe('Calculator', () => {
       ];
 
       expect(correctResults).toEqual([
-        (expect as any).toBeInRange(1, 5),
-        (expect as any).toBeInRange(4, 8),
-        (expect as any).toBeInRange(6, 10),
+        expect.toBeInRange(1, 5),
+        expect.toBeInRange(4, 8),
+        expect.toBeInRange(6, 10),
       ]);
     });
   });
@@ -217,15 +217,15 @@ describe('User', () => {
     it('should validate user name is alphabetic (with space)', () => {
       // Note: Our custom matcher only checks for letters, so this will fail
       // This demonstrates the matcher working as expected
-      // Using type assertion due to Jest 30 typing limitations with custom matchers
-      (expect('JohnDoe') as any).toBeAlphabetic();
-      (expect('John Doe') as any).not.toBeAlphabetic(); // Contains space
+      // Custom matchers now work without type assertion thanks to expect module declaration
+      expect('JohnDoe').toBeAlphabetic();
+      expect('John Doe').not.toBeAlphabetic(); // Contains space
     });
 
     it('should validate user object has all required properties', () => {
-      // Note: Using type assertion due to Jest 30 typing limitations with custom matchers  
-      (expect(user) as any).toHaveAllProperties(['id', 'name', 'email', 'age']);
-      (expect(user) as any).not.toHaveAllProperties(['id', 'name', 'email', 'age', 'phone']);
+      // Note: Custom matchers now work without type assertion thanks to expect module declaration
+      expect(user).toHaveAllProperties(['id', 'name', 'email', 'age']);
+      expect(user).not.toHaveAllProperties(['id', 'name', 'email', 'age', 'phone']);
     });
   });
 
@@ -238,16 +238,16 @@ describe('User', () => {
       ];
 
       expect(users).toEqual([
-        (expect as any).objectContaining({
-          name: (expect as any).stringMatching(/^A/),
-          age: (expect as any).toBeInRange(25, 30)
+        expect.objectContaining({
+          name: expect.stringMatching(/^A/),
+          age: expect.toBeInRange(25, 30)
         }),
-        (expect as any).objectContaining({
+        expect.objectContaining({
           name: 'Bob',
-          email: (expect as any).stringMatching(/@test\.com$/)
+          email: expect.stringMatching(/@test\.com$/)
         }),
-        (expect as any).objectContaining({
-          age: (expect as any).toBeInRange(30, 40)
+        expect.objectContaining({
+          age: expect.toBeInRange(30, 40)
         })
       ]);
     });
@@ -256,9 +256,9 @@ describe('User', () => {
       const emails = ['user@example.com', 'admin@test.org', 'developer@company.net'];
       
       expect(emails).toEqual([
-        (expect as any).stringMatching(/@example\.com$/),
-        (expect as any).stringMatching(/^admin@/),
-        (expect as any).stringMatching(/\.net$/)
+        expect.stringMatching(/@example\.com$/),
+        expect.stringMatching(/^admin@/),
+        expect.stringMatching(/\.net$/)
       ]);
     });
   });
@@ -273,12 +273,12 @@ describe('User', () => {
       expect(result).not.toBeCloseTo(0.9, 0.001);   // Should pass (not close)
       
       // toBeAlphabetic inverse cases
-      (expect('Hello') as any).toBeAlphabetic();           // Should pass
-      (expect('World') as any).toBeAlphabetic();           // Should pass  
-      (expect('Hello123') as any).not.toBeAlphabetic();    // Should pass (contains numbers)
-      (expect('Hello World') as any).not.toBeAlphabetic(); // Should pass (contains space)
-      (expect('Test!') as any).not.toBeAlphabetic();       // Should pass (contains special char)
-      (expect('') as any).not.toBeAlphabetic();            // Should pass (empty string)
+      expect('Hello').toBeAlphabetic();           // Should pass
+      expect('World').toBeAlphabetic();           // Should pass  
+      expect('Hello123').not.toBeAlphabetic();    // Should pass (contains numbers)
+      expect('Hello World').not.toBeAlphabetic(); // Should pass (contains space)
+      expect('Test!').not.toBeAlphabetic();       // Should pass (contains special char)
+      expect('').not.toBeAlphabetic();            // Should pass (empty string)
       
       // toHaveAllProperties inverse cases
       const mathResult = {
@@ -287,18 +287,18 @@ describe('User', () => {
         operands: [4, 6]
       };
       
-      (expect(mathResult) as any).toHaveAllProperties(['result', 'operation', 'operands']); // Should pass
-      (expect(mathResult) as any).not.toHaveAllProperties(['result', 'operation', 'timestamp']); // Should pass (missing timestamp)
-      (expect(mathResult) as any).not.toHaveAllProperties(['result', 'operation', 'operands', 'extra']); // Should pass (missing extra)
-      (expect({}) as any).not.toHaveAllProperties(['anything']); // Should pass (empty object)
+      expect(mathResult).toHaveAllProperties(['result', 'operation', 'operands']); // Should pass
+      expect(mathResult).not.toHaveAllProperties(['result', 'operation', 'timestamp']); // Should pass (missing timestamp)
+      expect(mathResult).not.toHaveAllProperties(['result', 'operation', 'operands', 'extra']); // Should pass (missing extra)
+      expect({}).not.toHaveAllProperties(['anything']); // Should pass (empty object)
       
       // toBeInRange inverse cases with type assertions
-      (expect(5) as any).toBeInRange(1, 10);      // Should pass
-      (expect(1) as any).toBeInRange(1, 10);      // Should pass (boundary)
-      (expect(10) as any).toBeInRange(1, 10);     // Should pass (boundary)
-      (expect(0) as any).not.toBeInRange(1, 10);  // Should pass (below range)
-      (expect(11) as any).not.toBeInRange(1, 10); // Should pass (above range)
-      (expect(-5) as any).not.toBeInRange(1, 10); // Should pass (negative, below range)
+      expect(5).toBeInRange(1, 10);      // Should pass
+      expect(1).toBeInRange(1, 10);      // Should pass (boundary)
+      expect(10).toBeInRange(1, 10);     // Should pass (boundary)
+      expect(0).not.toBeInRange(1, 10);  // Should pass (below range)
+      expect(11).not.toBeInRange(1, 10); // Should pass (above range)
+      expect(-5).not.toBeInRange(1, 10); // Should pass (negative, below range)
     });
 
     it('should validate inverse cases for asymmetric matchers', () => {
@@ -317,9 +317,9 @@ describe('User', () => {
       // This should fail because values don't match the ranges
       expect(() => {
         expect(outOfRangeResults).toEqual([
-          (expect as any).toBeInRange(1, 5),   // 20 is NOT in range [1, 5]
-          (expect as any).toBeInRange(4, 8),   // 1 is NOT in range [4, 8]
-          (expect as any).toBeInRange(6, 10),  // 2 is NOT in range [6, 10]
+          expect.toBeInRange(1, 5),   // 20 is NOT in range [1, 5]
+          expect.toBeInRange(4, 8),   // 1 is NOT in range [4, 8]
+          expect.toBeInRange(6, 10),  // 2 is NOT in range [6, 10]
         ]);
       }).toThrow();
 
@@ -328,9 +328,9 @@ describe('User', () => {
       
       expect(() => {
         expect(nonMatchingOperations).toEqual([
-          (expect as any).stringMatching(/^add/),    // 'division' doesn't start with 'add'
-          (expect as any).stringMatching('sub'),     // 'modulo' doesn't contain 'sub'
-          (expect as any).stringMatching(/tion$/)    // 'exponential' doesn't end with 'tion'
+          expect.stringMatching(/^add/),    // 'division' doesn't start with 'add'
+          expect.stringMatching('sub'),     // 'modulo' doesn't contain 'sub'
+          expect.stringMatching(/tion$/)    // 'exponential' doesn't end with 'tion'
         ]);
       }).toThrow();
 
@@ -342,11 +342,11 @@ describe('User', () => {
 
       expect(() => {
         expect(incompleteLog).toEqual([
-          (expect as any).objectContaining({
+          expect.objectContaining({
             operation: 'add',           // has 'subtract' not 'add'
             result: 5                   // has 3 not 5
           }),
-          (expect as any).objectContaining({
+          expect.objectContaining({
             operation: 'multiply',      // has 'divide' not 'multiply'
             result: 20                  // missing result property
           })
@@ -361,9 +361,9 @@ describe('User', () => {
       ];
 
       expect(correctResults).toEqual([
-        (expect as any).toBeInRange(1, 5),
-        (expect as any).toBeInRange(4, 8),
-        (expect as any).toBeInRange(6, 10),
+        expect.toBeInRange(1, 5),
+        expect.toBeInRange(4, 8),
+        expect.toBeInRange(6, 10),
       ]);
     });
   });

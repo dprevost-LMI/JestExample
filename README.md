@@ -160,9 +160,9 @@ describe('Calculator', () => {
 
 ## TypeScript Configuration
 
-The project includes proper TypeScript declarations for all custom matchers in `src/types/jest-custom.d.ts`. This file extends the `@jest/globals` module to provide full IntelliSense support and type checking for your custom matchers.
+The project includes proper TypeScript declarations for all custom matchers in `src/types/jest-custom.d.ts`. This file uses the Jest documentation's recommended approach with `declare module 'expect'` to provide full IntelliSense support and type checking for custom matchers without requiring `as any` type assertions.
 
-**Note**: Custom matchers require type assertions (`as any`) in test files when using `@jest/globals`. This is the standard approach for custom Jest matchers and ensures compatibility with Jest's type system while maintaining functionality.
+**Note**: With the proper `expect` module declaration approach, custom matchers work seamlessly without requiring type assertions. This provides excellent developer experience and type safety with Jest 30+.
 
 The custom matchers work seamlessly with the modern Jest typing system, providing excellent developer experience and type safety with the latest Jest features.
 

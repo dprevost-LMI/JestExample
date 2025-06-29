@@ -1,38 +1,18 @@
 // Custom Jest matchers extension for Jest 30+
-// Based on the official Jest repository patterns
+// Using the official Jest documentation approach with 'expect' module
 
-import '@jest/globals';
-
-declare module '@jest/globals' {
-  namespace jest {
-    interface Matchers<R> {
-      toBeCloseTo(expected: number, tolerance: number): R;
-      toBeAlphabetic(): R;
-      toHaveAllProperties(properties: string[]): R;
-      toBeInRange(min: number, max: number): R;
-    }
-
-    interface AsymmetricMatchers {
-      toBeInRange(min: number, max: number): any;
-    }
-
-    interface Expect extends AsymmetricMatchers {}
+declare module 'expect' {
+  interface AsymmetricMatchers {
+    toBeCloseTo(expected: number, tolerance: number): void;
+    toBeAlphabetic(): void;
+    toHaveAllProperties(properties: string[]): void;
+    toBeInRange(min: number, max: number): void;
   }
-}
-
-declare global {
-  namespace jest {
-    interface Matchers<R> {
-      toBeCloseTo(expected: number, tolerance: number): R;
-      toBeAlphabetic(): R;
-      toHaveAllProperties(properties: string[]): R;
-      toBeInRange(min: number, max: number): R;
-    }
-
-    interface AsymmetricMatchers {
-      toBeInRange(min: number, max: number): any;
-    }
-
-    interface Expect extends AsymmetricMatchers {}
+  
+  interface Matchers<R> {
+    toBeCloseTo(expected: number, tolerance: number): R;
+    toBeAlphabetic(): R;
+    toHaveAllProperties(properties: string[]): R;
+    toBeInRange(min: number, max: number): R;
   }
 }
