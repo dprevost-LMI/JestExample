@@ -61,7 +61,7 @@ expect(user).toHaveAllProperties(['id', 'name', 'email']);
 
 ## Asymmetric Matchers
 
-### 1. `numberInRange(min, max)`
+### 1. `numberInRange(min, max)` (Custom)
 Matches any number within a specified range.
 
 ```typescript
@@ -72,7 +72,7 @@ expect([1, 5, 9]).toEqual([
 ]);
 ```
 
-### 2. `stringMatching(pattern)`
+### 2. `stringMatching(pattern)` (Built-in Jest)
 Matches strings against a regex pattern.
 
 ```typescript
@@ -82,7 +82,7 @@ expect(['hello', 'world']).toEqual([
 ]);
 ```
 
-### 3. `objectContaining(properties)`
+### 3. `objectContaining(properties)` (Built-in Jest)
 Matches objects that contain specific properties.
 
 ```typescript

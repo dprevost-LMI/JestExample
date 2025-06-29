@@ -8,6 +8,8 @@ import { customMatchers, customAsymmetricMatchers } from './customMatchers';
 expect.extend(customMatchers);
 
 // Add custom asymmetric matchers to the global expect
+// Only our custom asymmetric matchers need to be assigned
 (expect as any).numberInRange = customAsymmetricMatchers.numberInRange;
-(expect as any).stringMatching = customAsymmetricMatchers.stringMatching;
-(expect as any).objectContaining = customAsymmetricMatchers.objectContaining;
+
+// Note: stringMatching and objectContaining are built-in Jest asymmetric matchers
+// so they don't need to be assigned here

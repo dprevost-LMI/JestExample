@@ -25,19 +25,12 @@ declare module '@jest/globals' {
 
     interface Expect {
       /**
-       * Asymmetric matcher for numbers within a range
+       * Custom asymmetric matcher for numbers within a range
        */
       numberInRange(min: number, max: number): any;
       
-      /**
-       * Asymmetric matcher for string matching
-       */
-      stringMatching(pattern: string | RegExp): any;
-      
-      /**
-       * Asymmetric matcher for object containing properties
-       */
-      objectContaining(properties: object): any;
+      // Note: stringMatching and objectContaining are built-in Jest asymmetric matchers
+      // so they don't need to be declared here
     }
   }
 }
@@ -53,8 +46,7 @@ declare global {
 
     interface Expect {
       numberInRange(min: number, max: number): any;
-      stringMatching(pattern: string | RegExp): any;
-      objectContaining(properties: object): any;
+      // Built-in asymmetric matchers are already available
     }
   }
 }

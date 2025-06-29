@@ -71,45 +71,6 @@ export const customAsymmetricMatchers = {
     };
   },
 
-  stringMatching(pattern: RegExp | string) {
-    const regex = pattern instanceof RegExp ? pattern : new RegExp(pattern);
-    return {
-      asymmetricMatch(actual: any) {
-        return typeof actual === 'string' && regex.test(actual);
-      },
-      toString() {
-        return `stringMatching(${pattern})`;
-      },
-      toAsymmetricMatcher() {
-        return `stringMatching(${pattern})`;
-      },
-    };
-  },
-
-  objectContaining(properties: Record<string, any>) {
-    return {
-      asymmetricMatch(actual: any) {
-        if (typeof actual !== 'object' || actual === null) {
-          return false;
-        }
-        
-        return Object.keys(properties).every(key => {
-          const expectedValue = properties[key];
-          const actualValue = actual[key];
-          
-          if (expectedValue && typeof expectedValue === 'object' && expectedValue.asymmetricMatch) {
-            return expectedValue.asymmetricMatch(actualValue);
-          }
-          
-          return actualValue === expectedValue;
-        });
-      },
-      toString() {
-        return `objectContaining(${JSON.stringify(properties)})`;
-      },
-      toAsymmetricMatcher() {
-        return `objectContaining(${JSON.stringify(properties)})`;
-      },
-    };
-  },
+  // Note: stringMatching and objectContaining are built-in Jest asymmetric matchers
+  // so they don't need custom implementations here
 };
