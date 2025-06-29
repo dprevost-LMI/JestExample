@@ -75,7 +75,7 @@ describe('Calculator', () => {
   });
 
   describe('Asymmetric Matchers', () => {
-    it('should use numberInRange asymmetric matcher', () => {
+    it('should use toBeInRange asymmetric matcher', () => {
       const results = [
         calculator.add(1, 2),    // 3
         calculator.add(2, 3),    // 5
@@ -83,9 +83,9 @@ describe('Calculator', () => {
       ];
 
       expect(results).toEqual([
-        (expect as any).numberInRange(1, 5),   // 3 is in range [1, 5]
-        (expect as any).numberInRange(4, 8),   // 5 is in range [4, 8]
-        (expect as any).numberInRange(6, 10),  // 7 is in range [6, 10]
+        (expect as any).toBeInRange(1, 5),   // 3 is in range [1, 5]
+        (expect as any).toBeInRange(4, 8),   // 5 is in range [4, 8]
+        (expect as any).toBeInRange(6, 10),  // 7 is in range [6, 10]
       ]);
     });
 
@@ -112,7 +112,7 @@ describe('Calculator', () => {
         }),
         (expect as any).objectContaining({
           operation: 'multiply',
-          a: (expect as any).numberInRange(3, 5)
+          a: (expect as any).toBeInRange(3, 5)
         })
       ]);
     });
@@ -178,14 +178,14 @@ describe('User', () => {
       expect(users).toEqual([
         (expect as any).objectContaining({
           name: (expect as any).stringMatching(/^A/),
-          age: (expect as any).numberInRange(25, 30)
+          age: (expect as any).toBeInRange(25, 30)
         }),
         (expect as any).objectContaining({
           name: 'Bob',
           email: (expect as any).stringMatching(/@test\.com$/)
         }),
         (expect as any).objectContaining({
-          age: (expect as any).numberInRange(30, 40)
+          age: (expect as any).toBeInRange(30, 40)
         })
       ]);
     });

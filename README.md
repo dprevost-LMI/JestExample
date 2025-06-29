@@ -61,14 +61,14 @@ expect(user).toHaveAllProperties(['id', 'name', 'email']);
 
 ## Asymmetric Matchers
 
-### 1. `numberInRange(min, max)` (Custom)
+### 1. `toBeInRange(min, max)` (Custom)
 Matches any number within a specified range.
 
 ```typescript
 expect([1, 5, 9]).toEqual([
-  expect.numberInRange(0, 3),
-  expect.numberInRange(4, 6),
-  expect.numberInRange(8, 10)
+  expect.toBeInRange(0, 3),
+  expect.toBeInRange(4, 6),
+  expect.toBeInRange(8, 10)
 ]);
 ```
 
@@ -89,7 +89,7 @@ Matches objects that contain specific properties.
 expect(users).toEqual([
   expect.objectContaining({
     name: expect.stringMatching(/^A/),
-    age: expect.numberInRange(25, 30)
+    age: expect.toBeInRange(25, 30)
   })
 ]);
 ```

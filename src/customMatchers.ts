@@ -53,24 +53,22 @@ export const customMatchers = {
       };
     }
   },
-};
 
-// Custom Asymmetric Matchers
-export const customAsymmetricMatchers = {
-  numberInRange(min: number, max: number) {
-    return {
-      asymmetricMatch(actual: any) {
-        return typeof actual === 'number' && actual >= min && actual <= max;
-      },
-      toString() {
-        return `numberInRange(${min}, ${max})`;
-      },
-      toAsymmetricMatcher() {
-        return `numberInRange(${min}, ${max})`;
-      },
-    };
+  toBeInRange(received: number, min: number, max: number) {
+    const pass = typeof received === 'number' && received >= min && received <= max;
+    
+    if (pass) {
+      return {
+        message: () => 
+          `expected ${received} not to be in range ${min} to ${max}`,
+        pass: true,
+      };
+    } else {
+      return {
+        message: () => 
+          `expected ${received} to be in range ${min} to ${max}`,
+        pass: false,
+      };
+    }
   },
-
-  // Note: stringMatching and objectContaining are built-in Jest asymmetric matchers
-  // so they don't need custom implementations here
 };
