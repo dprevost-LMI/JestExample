@@ -1,7 +1,7 @@
 {
   "name": "jest-typescript-example",
   "version": "1.0.0",
-  "description": "TypeScript and Jest example with custom matchers and asymmetric matchers",
+  "description": "TypeScript and Jest 30 example with custom matchers using @jest/globals (no @types/jest)",
   "main": "index.js",
   "scripts": {
     "test": "jest",
