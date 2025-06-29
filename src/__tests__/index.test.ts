@@ -54,7 +54,6 @@ describe('Calculator', () => {
     });
 
     it('should use toBeAlphabetic custom matcher', () => {
-      // Note: Using type assertion due to Jest 30 typing limitations with custom matchers
       (expect('Hello') as any).toBeAlphabetic();
       (expect('World') as any).toBeAlphabetic();
       (expect('Hello123') as any).not.toBeAlphabetic();
@@ -68,7 +67,7 @@ describe('Calculator', () => {
         operands: [4, 6]
       };
       
-      // Note: Using type assertion due to Jest 30 typing limitations with custom matchers
+      // Note: Custom matchers require type assertion in Jest 30+
       (expect(mathResult) as any).toHaveAllProperties(['result', 'operation', 'operands']);
       (expect(mathResult) as any).not.toHaveAllProperties(['result', 'operation', 'timestamp']);
     });
@@ -93,9 +92,9 @@ describe('Calculator', () => {
       const operations = ['addition', 'subtraction', 'multiplication'];
       
       expect(operations).toEqual([
-        (expect as any).stringMatching(/^add/),
-        (expect as any).stringMatching('sub'),
-        (expect as any).stringMatching(/tion$/)
+        expect.stringMatching(/^add/),
+        expect.stringMatching('sub'),
+        expect.stringMatching(/tion$/)
       ]);
     });
 
@@ -106,14 +105,77 @@ describe('Calculator', () => {
       ];
 
       expect(calculationLog).toEqual([
-        (expect as any).objectContaining({
+        expect.objectContaining({
           operation: 'add',
           result: 5
         }),
-        (expect as any).objectContaining({
+        expect.objectContaining({
           operation: 'multiply',
           a: (expect as any).toBeInRange(3, 5)
         })
+      ]);
+    });
+
+    it('should validate inverse cases for asymmetric matchers', () => {
+      // Test arrays that should NOT match the asymmetric matchers
+      
+      // toBeInRange asymmetric matcher - values outside ranges
+      const outOfRangeResults = [
+        calculator.add(10, 10),  // 20 - outside range [1, 5]
+        calculator.add(0, 1),    // 1 - outside range [4, 8] 
+        calculator.add(1, 1),    // 2 - outside range [6, 10]
+      ];
+
+      // This should fail because values don't match the ranges
+      expect(() => {
+        expect(outOfRangeResults).toEqual([
+          (expect as any).toBeInRange(1, 5),   // 20 is NOT in range [1, 5]
+          (expect as any).toBeInRange(4, 8),   // 1 is NOT in range [4, 8]
+          (expect as any).toBeInRange(6, 10),  // 2 is NOT in range [6, 10]
+        ]);
+      }).toThrow();
+
+      // stringMatching asymmetric matcher - strings that don't match patterns
+      const nonMatchingOperations = ['division', 'modulo', 'exponential'];
+      
+      expect(() => {
+        expect(nonMatchingOperations).toEqual([
+          (expect as any).stringMatching(/^add/),    // 'division' doesn't start with 'add'
+          (expect as any).stringMatching('sub'),     // 'modulo' doesn't contain 'sub'
+          (expect as any).stringMatching(/tion$/)    // 'exponential' doesn't end with 'tion'
+        ]);
+      }).toThrow();
+
+      // objectContaining asymmetric matcher - objects missing expected properties
+      const incompleteLog = [
+        { operation: 'subtract', result: 3 }, // missing 'a' and 'b'
+        { operation: 'divide', a: 10 }        // missing 'result'
+      ];
+
+      expect(() => {
+        expect(incompleteLog).toEqual([
+          (expect as any).objectContaining({
+            operation: 'add',           // has 'subtract' not 'add'
+            result: 5                   // has 3 not 5
+          }),
+          (expect as any).objectContaining({
+            operation: 'multiply',      // has 'divide' not 'multiply'
+            result: 20                  // missing result property
+          })
+        ]);
+      }).toThrow();
+
+      // Positive cases - these should work (inverse of the failing cases)
+      const correctResults = [
+        calculator.add(1, 2),    // 3 - in range [1, 5]
+        calculator.add(2, 3),    // 5 - in range [4, 8]
+        calculator.add(3, 4),    // 7 - in range [6, 10]
+      ];
+
+      expect(correctResults).toEqual([
+        (expect as any).toBeInRange(1, 5),
+        (expect as any).toBeInRange(4, 8),
+        (expect as any).toBeInRange(6, 10),
       ]);
     });
   });
@@ -197,6 +259,111 @@ describe('User', () => {
         (expect as any).stringMatching(/@example\.com$/),
         (expect as any).stringMatching(/^admin@/),
         (expect as any).stringMatching(/\.net$/)
+      ]);
+    });
+  });
+
+  describe('Comprehensive Tests', () => {
+    it('should validate inverse cases for custom matchers', () => {
+      // toBeCloseTo inverse cases - using a calculator instance
+      const calc = new Calculator();
+      const result = calc.divide(1, 3); // ≈ 0.333...
+      expect(result).toBeCloseTo(0.333, 0.001);     // Should pass
+      expect(result).not.toBeCloseTo(0.5, 0.1);     // Should pass (not close)
+      expect(result).not.toBeCloseTo(0.9, 0.001);   // Should pass (not close)
+      
+      // toBeAlphabetic inverse cases
+      (expect('Hello') as any).toBeAlphabetic();           // Should pass
+      (expect('World') as any).toBeAlphabetic();           // Should pass  
+      (expect('Hello123') as any).not.toBeAlphabetic();    // Should pass (contains numbers)
+      (expect('Hello World') as any).not.toBeAlphabetic(); // Should pass (contains space)
+      (expect('Test!') as any).not.toBeAlphabetic();       // Should pass (contains special char)
+      (expect('') as any).not.toBeAlphabetic();            // Should pass (empty string)
+      
+      // toHaveAllProperties inverse cases
+      const mathResult = {
+        result: 10,
+        operation: 'add',
+        operands: [4, 6]
+      };
+      
+      (expect(mathResult) as any).toHaveAllProperties(['result', 'operation', 'operands']); // Should pass
+      (expect(mathResult) as any).not.toHaveAllProperties(['result', 'operation', 'timestamp']); // Should pass (missing timestamp)
+      (expect(mathResult) as any).not.toHaveAllProperties(['result', 'operation', 'operands', 'extra']); // Should pass (missing extra)
+      (expect({}) as any).not.toHaveAllProperties(['anything']); // Should pass (empty object)
+      
+      // toBeInRange inverse cases with type assertions
+      (expect(5) as any).toBeInRange(1, 10);      // Should pass
+      (expect(1) as any).toBeInRange(1, 10);      // Should pass (boundary)
+      (expect(10) as any).toBeInRange(1, 10);     // Should pass (boundary)
+      (expect(0) as any).not.toBeInRange(1, 10);  // Should pass (below range)
+      (expect(11) as any).not.toBeInRange(1, 10); // Should pass (above range)
+      (expect(-5) as any).not.toBeInRange(1, 10); // Should pass (negative, below range)
+    });
+
+    it('should validate inverse cases for asymmetric matchers', () => {
+      // Create a calculator instance for this test
+      const calc = new Calculator();
+      
+      // Test arrays that should NOT match the asymmetric matchers
+      
+      // toBeInRange asymmetric matcher - values outside ranges
+      const outOfRangeResults = [
+        calc.add(10, 10),  // 20 - outside range [1, 5]
+        calc.add(0, 1),    // 1 - outside range [4, 8] 
+        calc.add(1, 1),    // 2 - outside range [6, 10]
+      ];
+
+      // This should fail because values don't match the ranges
+      expect(() => {
+        expect(outOfRangeResults).toEqual([
+          (expect as any).toBeInRange(1, 5),   // 20 is NOT in range [1, 5]
+          (expect as any).toBeInRange(4, 8),   // 1 is NOT in range [4, 8]
+          (expect as any).toBeInRange(6, 10),  // 2 is NOT in range [6, 10]
+        ]);
+      }).toThrow();
+
+      // stringMatching asymmetric matcher - strings that don't match patterns
+      const nonMatchingOperations = ['division', 'modulo', 'exponential'];
+      
+      expect(() => {
+        expect(nonMatchingOperations).toEqual([
+          (expect as any).stringMatching(/^add/),    // 'division' doesn't start with 'add'
+          (expect as any).stringMatching('sub'),     // 'modulo' doesn't contain 'sub'
+          (expect as any).stringMatching(/tion$/)    // 'exponential' doesn't end with 'tion'
+        ]);
+      }).toThrow();
+
+      // objectContaining asymmetric matcher - objects missing expected properties
+      const incompleteLog = [
+        { operation: 'subtract', result: 3 }, // missing 'a' and 'b'
+        { operation: 'divide', a: 10 }        // missing 'result'
+      ];
+
+      expect(() => {
+        expect(incompleteLog).toEqual([
+          (expect as any).objectContaining({
+            operation: 'add',           // has 'subtract' not 'add'
+            result: 5                   // has 3 not 5
+          }),
+          (expect as any).objectContaining({
+            operation: 'multiply',      // has 'divide' not 'multiply'
+            result: 20                  // missing result property
+          })
+        ]);
+      }).toThrow();
+
+      // Positive cases - these should work (inverse of the failing cases)
+      const correctResults = [
+        calc.add(1, 2),    // 3 - in range [1, 5]
+        calc.add(2, 3),    // 5 - in range [4, 8]
+        calc.add(3, 4),    // 7 - in range [6, 10]
+      ];
+
+      expect(correctResults).toEqual([
+        (expect as any).toBeInRange(1, 5),
+        (expect as any).toBeInRange(4, 8),
+        (expect as any).toBeInRange(6, 10),
       ]);
     });
   });
