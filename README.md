@@ -1,27 +1,24 @@
-# Jest 30+ TypeScript Custom Matchers Example (ESM)
+# Jest 30+ TypeScript Custom Matchers (ESM)
 
-This project demonstrates how to implement and provide full TypeScript support for custom Jest matchers in Jest 30+ using **ES Modules (ESM)**, including both regular matchers and asymmetric matchers, with complete IDE autocompletion and type checking.
+Modern Jest + TypeScript setup with custom matchers using ES Modules. Features full IDE support and type safety without `@types/jest`.
 
 ## Features
 
-✅ **ES Modules (ESM)**: Modern JavaScript module system  
-✅ **Custom Matchers**: `toBeCloseTo`, `toBeAlphabetic`, `toHaveAllProperties`, `toBeInRange`  
-✅ **Asymmetric Matchers**: `expect.toBeInRange(min, max)` for use with `toEqual`  
-✅ **Jest's Built-in .not**: Use `.not` with regular matchers for inverse logic  
-✅ **Full TypeScript Support**: Complete type safety and IDE autocompletion  
-✅ **Jest 30+ Compatible**: Uses `@jest/globals` (no `@types/jest` dependency)  
-✅ **No Type Casting**: All matchers work without `as any` or type assertions  
-✅ **Simple Configuration**: Minimal setup with just module augmentation and `export {}`  
+✅ **ES Modules** - Modern JavaScript module system  
+✅ **Custom Matchers** - `toBeCloseTo`, `toBeAlphabetic`, `toHaveAllProperties`, `toBeInRange`  
+✅ **Asymmetric Matchers** - Use with `toEqual` for complex matching  
+✅ **Jest 30+ Compatible** - Uses `@jest/globals` (no `@types/jest` dependency)  
+✅ **Full TypeScript Support** - Complete IDE autocompletion and type checking  
+✅ **Minimal Configuration** - Ultra-clean setup with sensible defaults  
 
-## Installation
+## Quick Start
 
 ```bash
 npm install
+npm test
 ```
 
-## ESM Configuration
-
-This project uses ES Modules with the following key configurations:
+## Configuration
 
 ### package.json
 ```json
@@ -34,17 +31,18 @@ This project uses ES Modules with the following key configurations:
 ```json
 {
   "compilerOptions": {
-    "module": "ESNext",
+    "target": "ES2022",
+    "module": "ESNext", 
     "moduleResolution": "bundler",
-    "esModuleInterop": true
-  }
+    "declaration": true,
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"]
 }
 ```
-
-**Module Resolution Options:**
-- `"bundler"` - Modern resolution for bundlers/build tools (recommended for most projects)
-- `"node16"/"nodenext"` - Node.js 16+ ESM-aware resolution (requires `"module": "Node16"` and `"isolatedModules": true`)
-- `"node"` - Legacy Node.js resolution (CommonJS era, not recommended for ESM)
 
 ### jest.config.js
 ```javascript
@@ -55,98 +53,37 @@ export default {
 };
 ```
 
-**What the ESM preset includes automatically:**
-- `testEnvironment: 'node'` - Node.js test environment
-- `testMatch: ['**/__tests__/**/*', '**/*.(test|spec).*']` - Default test file patterns
-- `extensionsToTreatAsEsm: ['.ts']` - Treat .ts files as ESM modules
-- `transform: { '^.+\\.ts$': ['ts-jest', { useESM: true }] }` - ESM-enabled TypeScript transformation
-- `collectCoverageFrom: ['**/*.(t|j)s']` - Default coverage collection
-- `coverageDirectory: 'coverage'` - Default coverage output directory
-- Other ESM-specific configurations
+## Usage Examples
 
-**Only specify what you need to override defaults!**
-
-## Usage
-
-### Regular Custom Matchers
-
+### Regular Matchers
 ```typescript
 import { describe, it, expect } from '@jest/globals';
 
-describe('Custom Matchers', () => {
-  it('should use custom matchers', () => {
-    // toBeCloseTo - number proximity with tolerance
-    expect(0.333).toBeCloseTo(1/3, 0.001);
-    
-    // toBeAlphabetic - string contains only letters
-    expect('Hello').toBeAlphabetic();
-    expect('Hello123').not.toBeAlphabetic();
-    
-    // toHaveAllProperties - object has all specified properties
-    const user = { id: 1, name: 'John', email: 'john@test.com' };
-    expect(user).toHaveAllProperties(['id', 'name', 'email']);
-    
-    // toBeInRange - number within range (inclusive)
-    expect(5).toBeInRange(1, 10);
-    expect(15).not.toBeInRange(1, 10);
-  });
+it('should use custom matchers', () => {
+  expect(0.333).toBeCloseTo(1/3, 0.001);
+  expect('Hello').toBeAlphabetic();
+  expect('Hello123').not.toBeAlphabetic();
+  expect({ id: 1, name: 'John' }).toHaveAllProperties(['id', 'name']);
+  expect(5).toBeInRange(1, 10);
 });
 ```
 
 ### Asymmetric Matchers
-
 ```typescript
-describe('Asymmetric Matchers', () => {
-  it('should use custom asymmetric matchers', () => {
-    const results = [3, 5, 7];
-    
-    // Use with toEqual for complex object matching
-    expect(results).toEqual([
-      expect.toBeInRange(1, 5),   // 3 is in range [1, 5]
-      expect.toBeInRange(4, 8),   // 5 is in range [4, 8]
-      expect.toBeInRange(6, 10),  // 7 is in range [6, 10]
-    ]);
-    
-    // Inverse asymmetric matchers
-    const outOfRange = [15, 0, 25];
-    expect(outOfRange).toEqual([
-      expect.not.toBeInRange(1, 10),   // 15 is NOT in range
-      expect.not.toBeInRange(5, 15),   // 0 is NOT in range
-      expect.not.toBeInRange(1, 20),   // 25 is NOT in range
-    ]);
-  });
+it('should use asymmetric matchers', () => {
+  const results = [3, 5, 7];
+  expect(results).toEqual([
+    expect.toBeInRange(1, 5),
+    expect.toBeInRange(4, 8), 
+    expect.toBeInRange(6, 10)
+  ]);
 });
 ```
 
-## Project Structure
+## Key Implementation Details
 
-```
-src/
-├── customMatchers.ts       # Custom matcher implementations
-├── setupTests.ts          # Jest setup file (registers matchers)
-├── types/
-│   └── jest-custom.d.ts   # TypeScript declarations for custom matchers
-├── __tests__/
-│   └── index.test.ts      # Test examples using custom matchers
-└── index.ts               # Main application code
-```
-
-## TypeScript Configuration
-
-### Key Files
-
-1. **`src/types/jest-custom.d.ts`** - Contains TypeScript declarations for custom matchers
-2. **`tsconfig.json`** - Configured with `typeRoots` pointing to `src/types`  
-3. **`jest.config.js`** - Sets up Jest with `setupFilesAfterEnv`
-
-### Type Declaration Strategy
-
-The solution uses a minimal and elegant approach with module augmentation:
-
+### TypeScript Declaration (src/types/jest-custom.d.ts)
 ```typescript
-// Custom Jest matchers type declarations for Jest 30+ with full IDE support
-
-// Extend the core expect module that Jest 30 uses
 declare module 'expect' {
   interface Matchers<R> {
     toBeCloseTo(expected: number, tolerance: number): R;
@@ -156,130 +93,44 @@ declare module 'expect' {
   }
   
   interface AsymmetricMatchers {
-    toBeCloseTo(expected: number, tolerance: number): AsymmetricMatcher;
-    toBeAlphabetic(): AsymmetricMatcher;
-    toHaveAllProperties(properties: string[]): AsymmetricMatcher;
     toBeInRange(min: number, max: number): AsymmetricMatcher;
+    // ... other asymmetric matchers
   }
 }
 
-export {}; // This line is crucial - makes TypeScript treat this as a module
+export {}; // 🔑 Crucial for module recognition
 ```
 
-## 🔑 Key Insight
+### Matcher Registration (src/setupTests.ts)
+```typescript
+import './customMatchers';
+```
 
-The crucial element that makes TypeScript recognize custom Jest matchers is the **`export {};` statement** at the end of the type declaration file. This simple line:
+### 🔑 Key Insight
+The `export {};` statement in the type declaration file is crucial - it makes TypeScript treat the file as a module and enables automatic discovery of custom matcher types.
 
-- **Enables Module Recognition**: Tells TypeScript to treat the file as a module
-- **Activates Module Augmentation**: Allows `declare module 'expect'` to work properly  
-- **Provides Automatic Discovery**: No manual imports or references needed in test files
-- **Ensures IDE Support**: Full autocompletion and type checking work out of the box
+## Project Structure
+```
+src/
+├── customMatchers.ts       # Matcher implementations
+├── setupTests.ts          # Registers matchers  
+├── types/jest-custom.d.ts # TypeScript declarations
+├── __tests__/             # Test files
+└── index.ts               # Application code
+```
 
-Without `export {};`, TypeScript treats the file as a script and module augmentation doesn't work correctly.
-
-### IDE Support
-
-For full IDE support with autocompletion and type checking:
-
-1. **Ensure TypeScript Configuration**: The `tsconfig.json` must include `"typeRoots": ["./node_modules/@types", "./src/types"]`
-2. **Module Export**: The type declaration file must include `export {};` to be treated as a module
-3. **Automatic Discovery**: TypeScript will automatically discover and apply the type declarations
-4. **No Manual References Needed**: With proper configuration, no triple-slash references are required
-
-**IDE Features Available**:
-- Full autocompletion for `expect(value).toBeCloseTo(expected, tolerance)`
-- Type checking for all custom matchers
-- IntelliSense for asymmetric matchers like `expect.toBeInRange(min, max)`
-- Error highlighting for incorrect usage
-
-## Running Tests
-
+## Scripts
 ```bash
-# Run all tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Build TypeScript
-npm run build
-
-# Run with development server
-npm run dev
+npm test              # Run tests
+npm run test:coverage # Run with coverage
+npm run build         # Compile TypeScript
+npm run clean         # Clean build artifacts
 ```
-
-## Custom Matcher Implementations
-
-### Regular Matchers
-
-All custom matchers follow Jest's matcher API:
-
-```typescript
-export const customMatchers = {
-  toBeInRange(received: number, min: number, max: number) {
-    const pass = typeof received === 'number' && received >= min && received <= max;
-    
-    if (pass) {
-      return {
-        message: () => `expected ${received} not to be in range ${min} to ${max}`,
-        pass: true,
-      };
-    } else {
-      return {
-        message: () => `expected ${received} to be in range ${min} to ${max}`,
-        pass: false,
-      };
-    }
-  },
-  // ... other matchers
-};
-```
-
-### Asymmetric Matchers
-
-Asymmetric matchers are automatically created by `expect.extend()`. For inverse logic, use Jest's built-in `.not` modifier with regular matchers:
-
-```typescript
-// Use Jest's built-in .not for inverse logic
-expect(value).not.toBeInRange(min, max);  // Recommended approach
-```
-
-## Troubleshooting
-
-### IDE Not Showing Custom Matchers
-
-1. **Restart TypeScript Language Service**: In VS Code: `Cmd+Shift+P` → "TypeScript: Restart TS Server"
-2. **Verify Type Configuration**: Check that `tsconfig.json` includes `"typeRoots": ["./node_modules/@types", "./src/types"]`
-3. **Check Export Statement**: Ensure `export {};` is present at the end of `jest-custom.d.ts`
-4. **Clear TypeScript Cache**: Delete `node_modules/.cache` and restart IDE
-
-### Type Errors During Build
-
-1. **Module Augmentation**: Ensure `declare module 'expect'` is used correctly
-2. **Missing AsymmetricMatcher Import**: Add `import { AsymmetricMatcher } from '@jest/expect-utils';` if needed
-3. **Export Statement**: The `export {};` statement is crucial for module recognition
-
-### Runtime Errors
-
-1. **Matcher Registration**: Verify `expect.extend(customMatchers)` is called in `setupTests.ts`
-2. **Jest Setup**: Ensure `setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts']` in Jest config
-3. **Asymmetric Matcher Symbol**: Check that `$$typeof: Symbol.for('jest.asymmetricMatcher')` is correct
 
 ## Dependencies
-
-This project uses Jest 30+ with minimal dependencies:
-
-- **`@jest/globals`** - Modern Jest globals (replaces `@types/jest`)
-- **`jest`** - Testing framework  
-- **`ts-jest`** - TypeScript support for Jest
-- **`typescript`** - TypeScript compiler
-
-No `@types/jest` dependency is needed, as this project uses the native Jest 30 types.
-
-## Contributing
-
-Feel free to submit issues and enhancement requests!
+- `@jest/globals` - Modern Jest globals (no `@types/jest` needed)
+- `jest` + `ts-jest` - Testing framework with TypeScript support
+- `typescript` - TypeScript compiler
 
 ## License
-
 MIT
