@@ -1,9 +1,10 @@
-# Jest 30+ TypeScript Custom Matchers Example
+# Jest 30+ TypeScript Custom Matchers Example (ESM)
 
-This project demonstrates how to implement and provide full TypeScript support for custom Jest matchers in Jest 30+, including both regular matchers and asymmetric matchers, with complete IDE autocompletion and type checking.
+This project demonstrates how to implement and provide full TypeScript support for custom Jest matchers in Jest 30+ using **ES Modules (ESM)**, including both regular matchers and asymmetric matchers, with complete IDE autocompletion and type checking.
 
 ## Features
 
+✅ **ES Modules (ESM)**: Modern JavaScript module system  
 ✅ **Custom Matchers**: `toBeCloseTo`, `toBeAlphabetic`, `toHaveAllProperties`, `toBeInRange`  
 ✅ **Asymmetric Matchers**: `expect.toBeInRange(min, max)` for use with `toEqual`  
 ✅ **Jest's Built-in .not**: Use `.not` with regular matchers for inverse logic  
@@ -17,6 +18,48 @@ This project demonstrates how to implement and provide full TypeScript support f
 ```bash
 npm install
 ```
+
+## ESM Configuration
+
+This project uses ES Modules with the following key configurations:
+
+### package.json
+```json
+{
+  "type": "module"
+}
+```
+
+### tsconfig.json
+```json
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true
+  }
+}
+```
+
+**Module Resolution Options:**
+- `"bundler"` - Modern resolution for bundlers/build tools (recommended for most projects)
+- `"node16"/"nodenext"` - Node.js 16+ ESM-aware resolution (requires `"module": "Node16"` and `"isolatedModules": true`)
+- `"node"` - Legacy Node.js resolution (CommonJS era, not recommended for ESM)
+
+### jest.config.js
+```javascript
+export default {
+  preset: 'ts-jest/presets/default-esm'
+};
+```
+
+**What the ESM preset includes automatically:**
+- `extensionsToTreatAsEsm: ['.ts']` - Treat .ts files as ESM modules
+- `transform: { '^.+\\.ts$': ['ts-jest', { useESM: true }] }` - ESM-enabled TypeScript transformation
+- `testEnvironment: 'node'` - Node.js test environment
+- Other ESM-specific configurations
+
+**No additional configuration needed** for basic ESM + TypeScript + Jest setup!
 
 ## Usage
 
