@@ -6,7 +6,13 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "build": "tsc",
+    "build:watch": "tsc --watch",
+    "build:test": "npm run build && npm test",
+    "clean": "rm -rf dist coverage",
+    "clean:build": "npm run clean && npm run build",
+    "clean:test": "npm run clean && npm run build && npm test",
     "dev": "ts-node src/index.ts"
   },
   "keywords": [
