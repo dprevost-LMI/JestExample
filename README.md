@@ -49,17 +49,22 @@ This project uses ES Modules with the following key configurations:
 ### jest.config.js
 ```javascript
 export default {
-  preset: 'ts-jest/presets/default-esm'
+  preset: 'ts-jest/presets/default-esm',
+  roots: ['<rootDir>/src'],
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts']
 };
 ```
 
 **What the ESM preset includes automatically:**
+- `testEnvironment: 'node'` - Node.js test environment
+- `testMatch: ['**/__tests__/**/*', '**/*.(test|spec).*']` - Default test file patterns
 - `extensionsToTreatAsEsm: ['.ts']` - Treat .ts files as ESM modules
 - `transform: { '^.+\\.ts$': ['ts-jest', { useESM: true }] }` - ESM-enabled TypeScript transformation
-- `testEnvironment: 'node'` - Node.js test environment
+- `collectCoverageFrom: ['**/*.(t|j)s']` - Default coverage collection
+- `coverageDirectory: 'coverage'` - Default coverage output directory
 - Other ESM-specific configurations
 
-**No additional configuration needed** for basic ESM + TypeScript + Jest setup!
+**Only specify what you need to override defaults!**
 
 ## Usage
 
