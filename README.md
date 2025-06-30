@@ -6,7 +6,7 @@ This project demonstrates how to implement and provide full TypeScript support f
 
 ✅ **Custom Matchers**: `toBeCloseTo`, `toBeAlphabetic`, `toHaveAllProperties`, `toBeInRange`  
 ✅ **Asymmetric Matchers**: `expect.toBeInRange(min, max)` for use with `toEqual`  
-✅ **Inverse Asymmetric Matchers**: `expect.not.toBeInRange(min, max)`  
+✅ **Jest's Built-in .not**: Use `.not` with regular matchers for inverse logic  
 ✅ **Full TypeScript Support**: Complete type safety and IDE autocompletion  
 ✅ **Jest 30+ Compatible**: Uses `@jest/globals` (no `@types/jest` dependency)  
 ✅ **No Type Casting**: All matchers work without `as any` or type assertions  
@@ -189,21 +189,11 @@ export const customMatchers = {
 
 ### Asymmetric Matchers
 
-Asymmetric matchers are automatically created by `expect.extend()`, but inverse matchers require manual setup:
+Asymmetric matchers are automatically created by `expect.extend()`. For inverse logic, use Jest's built-in `.not` modifier with regular matchers:
 
 ```typescript
-// Add inverse asymmetric matchers to expect.not
-(expect as any).not.toBeInRange = (min: number, max: number) => {
-  return {
-    $$typeof: Symbol.for('jest.asymmetricMatcher'),
-    asymmetricMatch(received: number) {
-      return typeof received === 'number' && (received < min || received > max);
-    },
-    toString() {
-      return `not.toBeInRange(${min}, ${max})`;
-    },
-  };
-};
+// Use Jest's built-in .not for inverse logic
+expect(value).not.toBeInRange(min, max);  // Recommended approach
 ```
 
 ## Troubleshooting
